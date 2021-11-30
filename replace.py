@@ -117,6 +117,7 @@ def replace_point_search(all_lattice, word_from: str):
                 continue
 
             for i, word in enumerate(data['word']):
+                word = word.lower()
                 if word == word_from[hit_position]:
                     if link not in hit_links:
                         hit_links.append(link)
@@ -182,10 +183,26 @@ def print_lattice(all_lattice, title: str) -> None:
         print(string[:-1])
 
 
+def trans_lattice(b_lattice):
+    a_lattice = {}
+
+    for speaker, _ in b_lattice["channels"]["firstChannelLabel"]["lattice"].items():
+        a_lattice.setdefault(speaker, {})
+        for k, v in [(k, v) for (k, v) in _["links"].items() if v["best_path"] is True]:
+            a_lattice[speaker][k] = v
+    with open("_.json", mode="w", encoding='utf_8_sig') as f:
+        f.write(json.dumps(a_lattice, indent=4, ensure_ascii=False))
+    return a_lattice
+
+
 def load_file():
     # with open("lattice_2h.json", mode="r", encoding='utf_8_sig') as f:
-    with open("lattice.json", mode="r", encoding='utf_8_sig') as f:
+    # with open("lattice.json", mode="r", encoding='utf_8_sig') as f:
+    # with open("0000_01_01_20020112_030000_0001.json", mode="r", encoding='utf_8_sig') as f:
+    with open("_.json", mode="r", encoding='utf_8_sig') as f:
         all_lattice = json.loads(f.read())
+        if "1" not in all_lattice:
+            all_lattice = trans_lattice(all_lattice)
     return all_lattice
 
 
