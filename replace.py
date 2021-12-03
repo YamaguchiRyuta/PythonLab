@@ -118,6 +118,11 @@ def replace_point_search(all_lattice, word_from: str):
 
             for i, word in enumerate(data['word']):
                 word = word.lower()
+                if word != word_from[hit_position]:
+                    hit_links = []
+                    hit_position = 0
+                    lattice_first_half_position = 0
+
                 if word == word_from[hit_position]:
                     if link not in hit_links:
                         hit_links.append(link)
@@ -133,10 +138,6 @@ def replace_point_search(all_lattice, word_from: str):
                         hit_links = []
                         hit_position = 0
                         lattice_first_half_position = 0
-                else:
-                    hit_links = []
-                    hit_position = 0
-                    lattice_first_half_position = 0
     return replace_position
 
 
@@ -198,8 +199,8 @@ def trans_lattice(b_lattice):
 def load_file():
     # with open("lattice_2h.json", mode="r", encoding='utf_8_sig') as f:
     # with open("lattice.json", mode="r", encoding='utf_8_sig') as f:
-    # with open("0000_01_01_20020112_030000_0001.json", mode="r", encoding='utf_8_sig') as f:
-    with open("_.json", mode="r", encoding='utf_8_sig') as f:
+    with open("0000_01_01_20020112_030000_0001.json", mode="r", encoding='utf_8_sig') as f:
+    # with open("_.json", mode="r", encoding='utf_8_sig') as f:
         all_lattice = json.loads(f.read())
         if "1" not in all_lattice:
             all_lattice = trans_lattice(all_lattice)
